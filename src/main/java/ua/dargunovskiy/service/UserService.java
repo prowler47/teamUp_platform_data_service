@@ -1,0 +1,50 @@
+package ua.dargunovskiy.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ua.dargunovskiy.dao.UserDao;
+import ua.dargunovskiy.dto.ProjectDto;
+import ua.dargunovskiy.entity.Participant;
+import ua.dargunovskiy.entity.Project;
+import ua.dargunovskiy.entity.User;
+import ua.dargunovskiy.util.ProjectDtoUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+@Service
+public class UserService {
+
+    @Autowired
+    private UserDao userDao;
+
+    public void addUser(User user) {
+        userDao.add(user);
+    }
+
+    public List<User> getAllUsers() {
+        return userDao.getAll();
+    }
+
+    public List<Project> getAllUsersProjects(UUID userId) throws NullPointerException {
+        User userById = userDao.getUserById(userId);
+        List<Participant> usersParticipants = userById.getParticipants();
+        List<Project> listOfUsersProjects = new ArrayList<>();
+        for (Participant participant : usersParticipants) {
+            listOfUsersProjects.add(participant.getProject());
+        }
+        return listOfUsersProjects;
+    }
+
+    public List<ProjectDto> getAllUsersProjectDto(UUID userId) {
+        User userById = userDao.getUserById(userId);
+        List<Participant> usersParticipants = userById.getParticipants();
+        List<ProjectDto> projectDtoList = new ArrayList<>();
+        for (Participant participant : usersParticipants) {
+            ProjectDto projectDto = ProjectDtoUtil.fromProjectToDto(participant.getProject().getId(), participant.getProject().getName(), participant.getProject().getDescription());
+            projectDtoList.add(projectDto);
+        }
+        return projectDtoList;
+    }
+}
