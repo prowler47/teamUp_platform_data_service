@@ -26,11 +26,9 @@ public class Participant {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "project_id")
-    @JsonIgnore
     private Project project;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private User user;
 }

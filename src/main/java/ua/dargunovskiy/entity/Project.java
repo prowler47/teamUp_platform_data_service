@@ -1,6 +1,5 @@
 package ua.dargunovskiy.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,5 +29,11 @@ public class Project {
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Participant> participants = new ArrayList<>();
+
+    @Column(name = "founder_id")
+    private UUID founderId;
+
+    @Column(name = "secret_code")
+    private String secretCode;
 
 }

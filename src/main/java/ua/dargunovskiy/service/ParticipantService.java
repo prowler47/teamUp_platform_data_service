@@ -20,6 +20,8 @@ public class ParticipantService {
     public void addParticipant(Participant participant) throws RuntimeException {
         if (!isDuplicatesPresent(getAllParticipants(), participant)) {
             participantDao.add(participant);
+        } else {
+            System.out.println("true");
         }
     }
 
@@ -46,9 +48,11 @@ public class ParticipantService {
 
     private boolean isDuplicatesPresent(List<Participant> list, Participant participantForAdding) {
         for (Participant participant : list) {
-            if (participant.getProject().getId().equals(participantForAdding.getProject().getId()) &&
-            participant.getUser().getId().equals(participantForAdding.getUser().getId())) {
-                return true;
+            if (participant.getProject() != null) {
+                if (participant.getProject().getId().equals(participantForAdding.getProject().getId()) &&
+                        participant.getUser().getId().equals(participantForAdding.getUser().getId())) {
+                    return true;
+                }
             }
         }
        return false;

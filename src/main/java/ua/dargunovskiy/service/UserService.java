@@ -47,4 +47,8 @@ public class UserService {
         }
         return projectDtoList;
     }
+
+    public void deleteUser(UUID userId) {
+        userDao.delete(userId);
+    }
 }

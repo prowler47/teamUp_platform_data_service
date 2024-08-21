@@ -21,11 +21,11 @@ public class ProjectController {
 
     @PostMapping("/addProject")
     public void addProject(@RequestBody Project project) {
-        try {
+//        try {
             projectService.addProject(project);
-        } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
+//        } catch (RuntimeException e) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+//        }
     }
 
     @GetMapping("/getAllProjects")

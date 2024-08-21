@@ -42,4 +42,9 @@ public class UserController {
         }
         return userService.getAllUsersProjectDto(id);
     }
+
+    @DeleteMapping("/deleteUser/{id}")
+    public void deleteUser(@PathVariable("id") UUID id) {
+        userService.deleteUser(id);
+    }
 }

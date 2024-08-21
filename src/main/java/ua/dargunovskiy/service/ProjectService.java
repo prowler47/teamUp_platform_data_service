@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ua.dargunovskiy.dao.Dao;
 import ua.dargunovskiy.dao.ProjectDao;
 import ua.dargunovskiy.dto.UserDto;
+import ua.dargunovskiy.entity.Founder;
 import ua.dargunovskiy.entity.Participant;
 import ua.dargunovskiy.entity.Project;
 import ua.dargunovskiy.entity.User;

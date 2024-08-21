@@ -6,6 +6,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import ua.dargunovskiy.entity.Founder;
 import ua.dargunovskiy.entity.Project;
 import org.hibernate.Session;
 
@@ -22,9 +23,6 @@ public class ProjectDao implements Dao<UUID, Project> {
     @Transactional
     public void add(Project project) {
         Session session = entityManager.unwrap(Session.class);
-        if (project.getName() == null || project.getDescription() == null) {
-            throw new RuntimeException();
-        }
         session.merge(project);
     }
 
@@ -56,5 +54,13 @@ public class ProjectDao implements Dao<UUID, Project> {
     public Project getProjectById(UUID projectId) {
         var session = entityManager.unwrap(Session.class);
         return session.get(Project.class, projectId);
+    }
+
+    @Transactional
+    public void setProjectIdFromProjectBySecretCodeToFounderById(Founder founderById) {
+        Session session = entityManager.unwrap(Session.class);
+        Query<Project> query = session.createQuery("from Project", Project.class);
+        List<Project> projectList = query.getResultList();
+        projectList.stream().filter(e -> e.getSecretCode().equals(founderById.getSecretCode())).findFirst().ifPresent(project -> founderById.setProjectId(project.getId()));
     }
 }

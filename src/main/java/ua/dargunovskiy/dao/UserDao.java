@@ -47,7 +47,12 @@ public class UserDao implements Dao<UUID, User> {
     }
 
     @Override
+    @Transactional
     public void delete(UUID id) {
-
+        Session session = entityManager.unwrap(Session.class);
+        User userForDelete = session.get(User.class, id);
+        if (userForDelete != null) {
+            session.remove(userForDelete);
+        }
     }
 }
