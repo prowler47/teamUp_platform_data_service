@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.dargunovskiy.dao.ParticipantDao;
 import ua.dargunovskiy.entity.Participant;
-import ua.dargunovskiy.entity.Project;
-import ua.dargunovskiy.entity.User;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -17,6 +14,7 @@ public class ParticipantService {
     @Autowired
     private ParticipantDao participantDao;
 
+    // add new participant to table participants
     public void addParticipant(Participant participant) throws RuntimeException {
         if (!isDuplicatesPresent(getAllParticipants(), participant)) {
             participantDao.add(participant);
@@ -25,19 +23,21 @@ public class ParticipantService {
         }
     }
 
+    // get full list of participants
     public List<Participant> getAllParticipants() {
        return participantDao.getAll();
     }
 
+    // get full list of participants with their projects
     public List<Participant> getAllParticipantsWithProjects() {
         List<Participant> listOfParticipantsWithProjects = new ArrayList<>();
         List<Participant> allParticipants = getAllParticipants();
         for (Participant participant : allParticipants) {
-           Participant expandedPArticipant =  new Participant();
-           expandedPArticipant.setId(participant.getId());
-           expandedPArticipant.setRole(participant.getRole());
-           expandedPArticipant.setProject(participant.getProject());
-           listOfParticipantsWithProjects.add(expandedPArticipant);
+           Participant expandedParticipant =  new Participant();
+           expandedParticipant.setId(participant.getId());
+           expandedParticipant.setRole(participant.getRole());
+           expandedParticipant.setProject(participant.getProject());
+           listOfParticipantsWithProjects.add(expandedParticipant);
         }
         return listOfParticipantsWithProjects;
     }
@@ -46,6 +46,7 @@ public class ParticipantService {
         participantDao.delete(id);
     }
 
+    // check if the same participant present in participants table
     private boolean isDuplicatesPresent(List<Participant> list, Participant participantForAdding) {
         for (Participant participant : list) {
             if (participant.getProject() != null) {

@@ -35,8 +35,13 @@ public class ProjectDao implements Dao<UUID, Project> {
     }
 
     @Override
-    public Project update(Project entity) {
-        return null;
+    @Transactional
+    public Project update(Project projectToUpdate, Project projectForUpdate) {
+        Session session = entityManager.unwrap(Session.class);
+        projectToUpdate.setName(projectForUpdate.getName());
+        projectToUpdate.setDescription(projectForUpdate.getDescription());
+        session.merge(projectToUpdate);
+        return projectToUpdate;
     }
 
     @Override

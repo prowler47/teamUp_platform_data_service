@@ -7,6 +7,6 @@ import java.util.List;
 public interface Dao<T, E> {
     void add(E entity);
     List<E> getAll();
-    E update(E entity);
+    E update(E entityToUpdate, E entityForUpdate);
     void delete(T id);
 }

@@ -29,13 +29,24 @@ public class FounderController {
         founderService.addFounder(founder, userId);
     }
 
+    @DeleteMapping("/deleteFounder/{founderId}")
+    public void deleteFounder(@PathVariable("founderId") UUID founderId) {
+        founderService.deleteFounder(founderId);
+    }
+
+    // ---------------------- as founder section: -----------------------
     @PostMapping("/addProjectAsFounder/{founderId}")
     public void addProjectAsFounder(@RequestBody Project project, @PathVariable("founderId") UUID founderId) {
         founderService.addProjectAsFounder(project, founderId);
     }
 
-    @DeleteMapping("/deleteFounder/{founderId}")
-    public void deleteFounder(@PathVariable("founderId") UUID founderId) {
-        founderService.deleteFounder(founderId);
+    @PatchMapping("/updateProjectAsFounder/{founderId}/{projectId}")
+    public void updateProjectAsFounder(@RequestBody Project projectForUpdate, @PathVariable("founderId") UUID founderId,  @PathVariable("projectId") UUID projectId) {
+        founderService.updateProjectAsFounder(founderId, projectId, projectForUpdate);
+    }
+
+    @DeleteMapping("/deleteProjectAsFounder/{founderId}/{projectId}")
+    public void deleteProjectAsFounder(@PathVariable("founderId") UUID founderId, @PathVariable("projectId") UUID projectId) {
+        founderService.deleteProjectAsFounder(founderId, projectId);
     }
 }

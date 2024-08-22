@@ -19,14 +19,18 @@ public class UserService {
     @Autowired
     private UserDao userDao;
 
+
+    // add new user
     public void addUser(User user) {
         userDao.add(user);
     }
 
+    // get full lust of users
     public List<User> getAllUsers() {
         return userDao.getAll();
     }
 
+    // get list of project in which this user take part
     public List<Project> getAllUsersProjects(UUID userId) throws NullPointerException {
         User userById = userDao.getUserById(userId);
         List<Participant> usersParticipants = userById.getParticipants();
@@ -37,6 +41,7 @@ public class UserService {
         return listOfUsersProjects;
     }
 
+    // get list of short version for view of projects in which this user take part
     public List<ProjectDto> getAllUsersProjectDto(UUID userId) {
         User userById = userDao.getUserById(userId);
         List<Participant> usersParticipants = userById.getParticipants();
@@ -48,6 +53,7 @@ public class UserService {
         return projectDtoList;
     }
 
+    // delete user by id
     public void deleteUser(UUID userId) {
         userDao.delete(userId);
     }

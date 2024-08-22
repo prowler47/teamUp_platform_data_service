@@ -37,7 +37,7 @@ public class FounderDao implements Dao<UUID, Founder>  {
     }
 
     @Override
-    public Founder update(Founder founder) { return null; }
+    public Founder update(Founder founderToUpdate, Founder founderForUpdate) { return null; }
 
     @Override
     @Transactional

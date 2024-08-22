@@ -6,6 +6,7 @@ import ua.dargunovskiy.dao.FounderDao;
 import ua.dargunovskiy.dao.ProjectDao;
 import ua.dargunovskiy.entity.Founder;
 import ua.dargunovskiy.entity.Project;
+import ua.dargunovskiy.util.AccessRightsUtil;
 import ua.dargunovskiy.util.FounderSecretCodeGenerator;
 
 import java.util.List;
@@ -20,10 +21,12 @@ public class FounderService {
     @Autowired
     private ProjectDao projectDao;
 
+    // add new founder (for development using)
     public void addFounder(Founder founder) throws RuntimeException {
         founderDao.add(founder);
     }
 
+    // add new founder (for user using)
     public void addFounder(Founder founder, UUID userId) {
         founder.setUserId(userId);
         founder.setSecretCode(FounderSecretCodeGenerator.secretCodeGenerator(founder));
@@ -32,6 +35,11 @@ public class FounderService {
         }
     }
 
+    public void deleteFounder(UUID founderId) {
+        founderDao.delete(founderId);
+    }
+
+    // ---------------------- as founder section: -----------------------
     public void addProjectAsFounder(Project project, UUID founderId) {
         Founder founderById = founderDao.getFounderById(founderId);
         project.setSecretCode(founderById.getSecretCode());
@@ -42,10 +50,25 @@ public class FounderService {
         }
     }
 
-    public void deleteFounder(UUID founderId) {
-        founderDao.delete(founderId);
+    // delete founder by id (for development using)
+
+    public void updateProjectAsFounder(UUID founderId, UUID projectId, Project projectForUpdate) {
+        Project projectToUpdate = projectDao.getProjectById(projectId);
+        Founder founderById = founderDao.getFounderById(founderId);
+        if (AccessRightsUtil.ifAccessGranted(founderById, projectToUpdate)) {
+            projectDao.update(projectToUpdate, projectForUpdate);
+        }
     }
 
+    public void deleteProjectAsFounder(UUID founderId, UUID projectId) {
+        Founder founderById = founderDao.getFounderById(founderId);
+        Project projectById = projectDao.getProjectById(projectId);
+        if (AccessRightsUtil.ifAccessGranted(founderById, projectById)) {
+            projectDao.delete(projectId);
+        }
+    }
+
+    // check if the same project is present in table projects by founder_id field
      private boolean isProjectDuplicate(UUID founderId) {
         List<Project> allProjects = projectDao.getAll();
         for (Project project : allProjects) {
@@ -56,6 +79,7 @@ public class FounderService {
         return false;
     }
 
+    // check is the same founder is present in founders table by user_id field
     private boolean isFounderDuplicate(UUID userId) {
         List<Founder> allFounders = founderDao.getAll();
         for (Founder founder : allFounders) {

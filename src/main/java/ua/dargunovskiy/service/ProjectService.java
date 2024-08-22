@@ -20,18 +20,22 @@ public class ProjectService {
     @Autowired
     private ProjectDao projectDao;
 
+    // add new project (for development using)
     public void addProject(Project project) throws RuntimeException {
         projectDao.add(project);
     }
 
+    // get full list of projects
     public List<Project> getAllProjects()  {
         return projectDao.getAll();
     }
 
+    // delete project by id (for development using)
     public void removeProject(UUID id) throws RuntimeException {
         projectDao.delete(id);
     }
 
+    // get full list of users which take part of this project by project id
     public List<UserDto> getAllUsersFromProject(UUID id) {
        var project = projectDao.getProjectById(id);
         List<Participant> participantsFromProject = project.getParticipants();

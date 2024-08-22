@@ -42,7 +42,7 @@ public class UserDao implements Dao<UUID, User> {
     }
 
     @Override
-    public User update(User entity) {
+    public User update(User entityToUpdate, User entityForUpdate) {
         return null;
     }
 

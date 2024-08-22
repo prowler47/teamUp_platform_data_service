@@ -37,7 +37,7 @@ public class ParticipantDao implements Dao<UUID, Participant> {
     }
 
     @Override
-    public Participant update(Participant entity) {
+    public Participant update(Participant entityToUpdate, Participant entityForUpdate) {
         return null;
     }
 
