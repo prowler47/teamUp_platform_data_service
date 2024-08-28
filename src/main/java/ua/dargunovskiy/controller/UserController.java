@@ -7,6 +7,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ua.dargunovskiy.dto.ProjectDto;
 import ua.dargunovskiy.entity.Project;
 import ua.dargunovskiy.entity.User;
+import ua.dargunovskiy.entity.UserRequest;
 import ua.dargunovskiy.service.UserService;
 
 import java.util.List;
@@ -46,5 +47,11 @@ public class UserController {
     @DeleteMapping("/deleteUser/{id}")
     public void deleteUser(@PathVariable("id") UUID id) {
         userService.deleteUser(id);
+    }
+
+    @PostMapping("/createRequestToProject/{userId}/{projectId}")
+    public void createRequestToProject(@PathVariable("userId") UUID userId, @PathVariable("projectId") UUID projectId,
+                                       @RequestBody UserRequest userRequest) {
+        userService.createRequestToProject(projectId, userId, userRequest);
     }
 }

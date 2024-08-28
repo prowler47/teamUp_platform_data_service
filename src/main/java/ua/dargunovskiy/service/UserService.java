@@ -3,10 +3,12 @@ package ua.dargunovskiy.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.dargunovskiy.dao.UserDao;
+import ua.dargunovskiy.dao.UserRequestDao;
 import ua.dargunovskiy.dto.ProjectDto;
 import ua.dargunovskiy.entity.Participant;
 import ua.dargunovskiy.entity.Project;
 import ua.dargunovskiy.entity.User;
+import ua.dargunovskiy.entity.UserRequest;
 import ua.dargunovskiy.util.ProjectDtoUtil;
 
 import java.util.ArrayList;
@@ -19,6 +21,8 @@ public class UserService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private UserRequestDao userRequestDao;
 
     // add new user
     public void addUser(User user) {
@@ -56,5 +60,12 @@ public class UserService {
     // delete user by id
     public void deleteUser(UUID userId) {
         userDao.delete(userId);
+    }
+
+    public void createRequestToProject(UUID projectId, UUID userId, UserRequest userRequest) {
+        userRequest.setProjectId(projectId);
+        User userById = userDao.getUserById(userId);
+        userRequest.setUser(userById);
+        userRequestDao.add(userRequest);
     }
 }

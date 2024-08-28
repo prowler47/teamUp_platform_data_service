@@ -2,11 +2,14 @@ package ua.dargunovskiy.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ua.dargunovskiy.dto.UserRequestDto;
 import ua.dargunovskiy.entity.Founder;
 import ua.dargunovskiy.entity.Project;
+import ua.dargunovskiy.entity.UserRequest;
 import ua.dargunovskiy.service.FounderService;
 import ua.dargunovskiy.service.ProjectService;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -48,5 +51,15 @@ public class FounderController {
     @DeleteMapping("/deleteProjectAsFounder/{founderId}/{projectId}")
     public void deleteProjectAsFounder(@PathVariable("founderId") UUID founderId, @PathVariable("projectId") UUID projectId) {
         founderService.deleteProjectAsFounder(founderId, projectId);
+    }
+
+    @GetMapping("/getAllUserRequestsByFounderId/{founderId}")
+    public List<UserRequestDto> getAllUserRequestsByFounderId(@PathVariable("founderId") UUID founderId) {
+        return founderService.getAllUserRequestsDtoByFounderId(founderId);
+    }
+
+    @PostMapping("/addNewParticipantToProject/{founderId}")
+    public void addNewParticipantToProject(@PathVariable("founderId") UUID founderId, @RequestBody UserRequestDto userRequestDto) {
+        founderService.addNewParticipantToProjectAsFounder(founderId, userRequestDto);
     }
 }

@@ -3,12 +3,19 @@ package ua.dargunovskiy.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.dargunovskiy.dao.FounderDao;
+import ua.dargunovskiy.dao.ParticipantDao;
 import ua.dargunovskiy.dao.ProjectDao;
+import ua.dargunovskiy.dao.UserRequestDao;
+import ua.dargunovskiy.dto.UserRequestDto;
 import ua.dargunovskiy.entity.Founder;
+import ua.dargunovskiy.entity.Participant;
 import ua.dargunovskiy.entity.Project;
+import ua.dargunovskiy.entity.UserRequest;
 import ua.dargunovskiy.util.AccessRightsUtil;
 import ua.dargunovskiy.util.FounderSecretCodeGenerator;
+import ua.dargunovskiy.util.UserRequestsDtoUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +27,12 @@ public class FounderService {
 
     @Autowired
     private ProjectDao projectDao;
+
+    @Autowired
+    private UserRequestDao userRequestDao;
+
+    @Autowired
+    private ParticipantDao participantDao;
 
     // add new founder (for development using)
     public void addFounder(Founder founder) throws RuntimeException {
@@ -50,7 +63,9 @@ public class FounderService {
         }
     }
 
-    // delete founder by id (for development using)
+    public void updateFounder(Founder founderToUpdate, Founder founderForUpdate) {
+        founderDao.update(founderToUpdate, founderForUpdate);
+    }
 
     public void updateProjectAsFounder(UUID founderId, UUID projectId, Project projectForUpdate) {
         Project projectToUpdate = projectDao.getProjectById(projectId);
@@ -65,8 +80,39 @@ public class FounderService {
         Project projectById = projectDao.getProjectById(projectId);
         if (AccessRightsUtil.ifAccessGranted(founderById, projectById)) {
             projectDao.delete(projectId);
+            founderDao.delete(founderId);
+            userRequestDao.deleteByProjectId(projectId);
         }
     }
+
+    //TODO
+    public void addNewParticipantToProjectAsFounder(UUID founderId, UserRequestDto userRequestDto) {
+        if (!isParticipantDuplicate(userRequestDto)) {
+            System.out.println("true");
+            founderDao.addNewParticipantToProject(founderId, userRequestDto);
+        }
+    }
+
+    public List<UserRequest> getAllUserRequestByFounderId(UUID founderId) {
+        UUID projectId = founderDao.getFounderById(founderId).getProjectId();
+        return userRequestDao.getALLRequestsByProjectId(projectId);
+    }
+
+    public List<UserRequestDto> getAllUserRequestsDtoByFounderId(UUID founderId) {
+        UUID projectId = null;
+        if (founderDao.getFounderById(founderId) != null) {
+            projectId = founderDao.getFounderById(founderId).getProjectId();
+        }
+        List<UserRequest> allRequestsByProjectId = userRequestDao.getALLRequestsByProjectId(projectId);
+        List<UserRequestDto> userRequestDtoList = new ArrayList<>();
+        for (UserRequest userRequest : allRequestsByProjectId) {
+            userRequestDtoList.add(UserRequestsDtoUtil.fromUserRequestsToUserRequestsDto(userRequest));
+        }
+        return userRequestDtoList;
+    }
+
+
+    // --------------------------- auxiliary methods section: -------------------------------------
 
     // check if the same project is present in table projects by founder_id field
      private boolean isProjectDuplicate(UUID founderId) {
@@ -84,6 +130,16 @@ public class FounderService {
         List<Founder> allFounders = founderDao.getAll();
         for (Founder founder : allFounders) {
             if (founder.getUserId().equals(userId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isParticipantDuplicate(UserRequestDto userRequestDto) {
+        List<Participant> participantList = participantDao.getAll();
+        for (Participant participant : participantList) {
+            if (participant.getUser().getId().equals(userRequestDto.getUserId())) {
                 return true;
             }
         }

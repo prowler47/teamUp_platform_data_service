@@ -32,4 +32,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Participant> participants;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private UserRequest userRequest;
 }
+
+

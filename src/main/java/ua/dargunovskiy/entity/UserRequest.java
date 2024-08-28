@@ -1,28 +1,28 @@
 package ua.dargunovskiy.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "founders")
+@Table(name = "user_requests")
 @Data
-public class Founder {
+public class UserRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "user_id")
-    private UUID userId;
-
-    @Column(name = "secret_code")
-    private String secretCode;
-
     @Column(name = "project_id")
     private UUID projectId;
 
+    @Column(name = "cover_letter")
+    private String coverLetter;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
