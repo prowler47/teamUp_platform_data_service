@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import ua.dargunovskiy.dto.ParticipantDto;
 import ua.dargunovskiy.entity.Participant;
 import ua.dargunovskiy.entity.Project;
 import ua.dargunovskiy.service.ParticipantService;
@@ -30,6 +31,11 @@ public class ParticipantController {
     @GetMapping("/getAllParticipants")
     public List<Participant> getAllParticipants() {
         return participantService.getAllParticipants();
+    }
+
+    @GetMapping("/getAllParticipantsDtoFromProject/{projectId}")
+    public List<ParticipantDto> getAllParticipantDtoFromProject(@PathVariable("projectId") UUID projectId) {
+        return participantService.getAllParticipantsDtoFromProject(projectId);
     }
 
     @DeleteMapping("/removeParticipant/{id}")

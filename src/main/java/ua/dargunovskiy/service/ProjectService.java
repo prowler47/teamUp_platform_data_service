@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.dargunovskiy.dao.Dao;
 import ua.dargunovskiy.dao.ProjectDao;
+import ua.dargunovskiy.dto.ProjectDto;
 import ua.dargunovskiy.dto.UserDto;
 import ua.dargunovskiy.entity.Founder;
 import ua.dargunovskiy.entity.Participant;
 import ua.dargunovskiy.entity.Project;
 import ua.dargunovskiy.entity.User;
+import ua.dargunovskiy.util.ProjectDtoUtil;
 import ua.dargunovskiy.util.UserDtoUtil;
 
 import java.util.ArrayList;
@@ -28,6 +30,15 @@ public class ProjectService {
     // get full list of projects
     public List<Project> getAllProjects()  {
         return projectDao.getAll();
+    }
+
+    public List<ProjectDto> getAllProjectsDto() {
+        List<Project> projectList = getAllProjects();
+        List<ProjectDto> projectDtoList = new ArrayList<>();
+        for (Project project : projectList) {
+            projectDtoList.add(ProjectDtoUtil.fromProjectToDto(project.getId(), project.getName(), project.getDescription()));
+        }
+        return projectDtoList;
     }
 
     // delete project by id (for development using)

@@ -5,16 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
 @Component
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRequestDto {
-    private UUID id;
-    private UUID userId;
-    private UUID projectId;
+public class ParticipantDto {
+    private String name;
     private String speciality;
-    private String coverLetter;
 }

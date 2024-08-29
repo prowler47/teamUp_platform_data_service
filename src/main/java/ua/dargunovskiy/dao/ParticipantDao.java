@@ -36,6 +36,12 @@ public class ParticipantDao implements Dao<UUID, Participant> {
         return query.getResultList();
     }
 
+    @Transactional
+    public Participant getParticipantById(UUID participantId) {
+        Session session = entityManager.unwrap(Session.class);
+        return session.get(Participant.class, participantId);
+    }
+
     @Override
     public Participant update(Participant entityToUpdate, Participant entityForUpdate) {
         return null;

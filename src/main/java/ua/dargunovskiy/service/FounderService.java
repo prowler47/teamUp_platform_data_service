@@ -85,11 +85,18 @@ public class FounderService {
         }
     }
 
-    //TODO
     public void addNewParticipantToProjectAsFounder(UUID founderId, UserRequestDto userRequestDto) {
         if (!isParticipantDuplicate(userRequestDto)) {
-            System.out.println("true");
             founderDao.addNewParticipantToProject(founderId, userRequestDto);
+            userRequestDao.delete(userRequestDto.getId());
+        }
+    }
+
+    public void deleteParticipant(UUID founderId, UUID participantId) {
+        Founder founderById = founderDao.getFounderById(founderId);
+        Participant participantById = participantDao.getParticipantById(participantId);
+        if (AccessRightsUtil.ifAccessGranted(founderById, participantById.getProject())) {
+            participantDao.delete(participantId);
         }
     }
 

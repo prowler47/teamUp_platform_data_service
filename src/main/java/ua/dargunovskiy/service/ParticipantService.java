@@ -3,11 +3,14 @@ package ua.dargunovskiy.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.dargunovskiy.dao.ParticipantDao;
+import ua.dargunovskiy.dto.ParticipantDto;
 import ua.dargunovskiy.entity.Participant;
+import ua.dargunovskiy.util.ParticipantDtoUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ParticipantService {
@@ -26,6 +29,15 @@ public class ParticipantService {
     // get full list of participants
     public List<Participant> getAllParticipants() {
        return participantDao.getAll();
+    }
+
+    public List<ParticipantDto> getAllParticipantsDtoFromProject(UUID projectId) {
+        List<Participant> participantList = getAllParticipants().stream().filter(e -> e.getProject().getId().equals(projectId)).toList();
+        List<ParticipantDto> participantDtoList = new ArrayList<>();
+        for (Participant participant : participantList) {
+            participantDtoList.add(ParticipantDtoUtil.fromParticipantToParticipantDto(participant));
+        }
+        return participantDtoList;
     }
 
     // get full list of participants with their projects

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import ua.dargunovskiy.dto.ProjectDto;
 import ua.dargunovskiy.dto.UserDto;
 import ua.dargunovskiy.entity.Project;
 import ua.dargunovskiy.entity.User;
@@ -31,6 +32,11 @@ public class ProjectController {
     @GetMapping("/getAllProjects")
     public List<Project> getProjects() {
        return projectService.getAllProjects();
+    }
+
+    @GetMapping("/getAllProjectsDto")
+    public List<ProjectDto> getAllProjectsDto() {
+        return projectService.getAllProjectsDto();
     }
 
     @GetMapping("/getAllUsersFromProject/{projectId}")

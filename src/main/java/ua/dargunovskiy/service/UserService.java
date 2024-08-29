@@ -5,11 +5,13 @@ import org.springframework.stereotype.Service;
 import ua.dargunovskiy.dao.UserDao;
 import ua.dargunovskiy.dao.UserRequestDao;
 import ua.dargunovskiy.dto.ProjectDto;
+import ua.dargunovskiy.dto.UserDto;
 import ua.dargunovskiy.entity.Participant;
 import ua.dargunovskiy.entity.Project;
 import ua.dargunovskiy.entity.User;
 import ua.dargunovskiy.entity.UserRequest;
 import ua.dargunovskiy.util.ProjectDtoUtil;
+import ua.dargunovskiy.util.UserDtoUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,15 @@ public class UserService {
     // get full lust of users
     public List<User> getAllUsers() {
         return userDao.getAll();
+    }
+
+    public List<UserDto> getAllUsersDto() {
+        List<User> userList = userDao.getAll();
+        List<UserDto> userDtoList = new ArrayList<>();
+        for (User user : userList) {
+            userDtoList.add(UserDtoUtil.fromUserToUserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getSpeciality()));
+        }
+        return userDtoList;
     }
 
     // get list of project in which this user take part

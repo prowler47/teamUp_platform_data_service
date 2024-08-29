@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ua.dargunovskiy.dto.ProjectDto;
+import ua.dargunovskiy.dto.UserDto;
 import ua.dargunovskiy.entity.Project;
 import ua.dargunovskiy.entity.User;
 import ua.dargunovskiy.entity.UserRequest;
@@ -34,14 +35,19 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/getProjects/{id}")
-    public List<ProjectDto> getUsersProjects(@PathVariable("id") UUID id) {
+    @GetMapping("/getAllUsersDto")
+    public List<UserDto> getAllUsersDto() {
+       return userService.getAllUsersDto();
+    }
+
+    @GetMapping("/getProjects/{userId}")
+    public List<ProjectDto> getUsersProjects(@PathVariable("userId") UUID userId) {
         try {
-            userService.getAllUsersProjectDto(id);
+            userService.getAllUsersProjectDto(userId);
         } catch (NullPointerException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        return userService.getAllUsersProjectDto(id);
+        return userService.getAllUsersProjectDto(userId);
     }
 
     @DeleteMapping("/deleteUser/{id}")

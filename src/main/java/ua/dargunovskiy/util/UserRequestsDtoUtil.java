@@ -8,6 +8,7 @@ import ua.dargunovskiy.entity.UserRequest;
 public class UserRequestsDtoUtil {
     public UserRequestDto fromUserRequestsToUserRequestsDto(UserRequest userRequest) {
         UserRequestDto userRequestDto = new UserRequestDto();
+        userRequestDto.setId(userRequest.getId());
         userRequestDto.setUserId(userRequest.getUser().getId());
         userRequestDto.setProjectId(userRequest.getProjectId());
         userRequestDto.setSpeciality(userRequest.getUser().getSpeciality());

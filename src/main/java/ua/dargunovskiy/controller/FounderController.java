@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import ua.dargunovskiy.dto.UserRequestDto;
 import ua.dargunovskiy.entity.Founder;
 import ua.dargunovskiy.entity.Project;
-import ua.dargunovskiy.entity.UserRequest;
 import ua.dargunovskiy.service.FounderService;
 import ua.dargunovskiy.service.ProjectService;
 
@@ -61,5 +60,10 @@ public class FounderController {
     @PostMapping("/addNewParticipantToProject/{founderId}")
     public void addNewParticipantToProject(@PathVariable("founderId") UUID founderId, @RequestBody UserRequestDto userRequestDto) {
         founderService.addNewParticipantToProjectAsFounder(founderId, userRequestDto);
+    }
+
+    @DeleteMapping("/deleteParticipantFromProject/{founderId}/{participantId}")
+    public void deleteParticipantFromProject(@PathVariable("founderId") UUID founderId, @PathVariable("participantId") UUID participantId) {
+        founderService.deleteParticipant(founderId, participantId);
     }
 }
